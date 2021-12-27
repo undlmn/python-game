@@ -1,0 +1,25 @@
+Map:
+> [Record] offset, x, y, w, h: 0, 9, 4, 6, 1 (6 bytes)
+> [Score] offset, x, y, w, h: 6, 21, 4, 4, 1 (4 bytes)
+> [Title] offset, x, y, w, h: 10, 8, 10, 20, 5 (100 bytes)
+> [Annotation - line 1] offset, x, y, w, h: 110, 10, 20, 15, 1 (15 bytes)
+> [Annotation - line 2] offset, x, y, w, h: 125, 10, 22, 15, 1 (15 bytes)
+> [Playground] offset, x, y, w, h: 140, 2, 2, 32, 24 (768 bytes)
+> [Game Over] offset, x, y, w, h: 908, 12, 12, 13, 1 (13 bytes)
+> [Carrots - Level 1] offset, x, y, w, h: 921, 9, 5, 16, 16 (256 bytes)
+> [Carrots - Level 2] offset, x, y, w, h: 1177, 9, 5, 16, 16 (256 bytes)
+> [Carrots - Level 3] offset, x, y, w, h: 1433, 9, 5, 16, 16 (256 bytes)
+> [Carrots - Level 4] offset, x, y, w, h: 1689, 9, 5, 16, 16 (256 bytes)
+Set:
+> offset, length: 1945, 2956
+Samples:
+> 0. [music-intro.mp3] offset, end: 4901, 34480
+> 1. [music-part-1.mp3] offset, end: 34480, 65420
+> 2. [music-part-2.mp3] offset, end: 65420, 117242
+> 3. [music-part-3.mp3] offset, end: 117242, 203649
+> 4. [jump.mp3] offset, end: 203649, 205945
+> 5. [eat.mp3] offset, end: 205945, 208919
+> 6. [complete.mp3] offset, end: 208919, 256509
+> 7. [die.mp3] offset, end: 256509, 292880
+> 8. [game-over.mp3] offset, end: 292880, 400963
+done.

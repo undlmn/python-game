@@ -1,0 +1,19 @@
+{
+  "name": "python-game",
+  "version": "1.0.0",
+  "description": "Clone of the game Python of the Soviet gaming machine Photon (1989)",
+  "author": "undlmn",
+  "license": "ISC",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "serve src",
+    "make-data": "node scripts/concat-data.js > src/_data-index.txt && cat src/_data-index.txt",
+    "build": "node scripts/build.js",
+    "server": "serve build"
+  },
+  "dependencies": {
+    "serve": "^13.0.2",
+    "terser": "^5.10.0"
+  }
+}
