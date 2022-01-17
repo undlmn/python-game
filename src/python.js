@@ -26,15 +26,42 @@
   });
 
   let keyboard;
-  listenKeyboard(({ code, type }) => {
+  listenKeyboard((event) => {
     if (keyboard) {
-      const key = keyboard.keys.indexOf(code);
-      const callback = type[3] == "d" ? keyboard.down : keyboard.up;
+      const key = keyboard.keys.indexOf(event.code);
+      const callback = event.type[3] == "d" ? keyboard.down : keyboard.up;
       if (~key && callback) {
         callback(key);
         event.preventDefault();
       }
     }
+  });
+
+  let touch;
+  let touchStartX;
+  let touchStartY;
+  let touchMoveDir = -1;
+  listenTouch((event) => {
+    event.preventDefault();
+    const t = event.type[5];
+    touchMoveDir = -1;
+    const x = event.touches[0]?.pageX;
+    const y = event.touches[0]?.pageY;
+    if (t == "s") {
+      touchStartX = x;
+      touchStartY = y;
+    }
+    if (t == "m") {
+      const dx = touchStartX - x;
+      const dy = touchStartY - y;
+      const adx = Math.abs(dx);
+      const ady = Math.abs(dy);
+      if (adx > 9 || ady > 9) {
+        touchMoveDir = adx > ady ? (dx > 0 ? 3 : 1) : dy > 0 ? 0 : 2;
+      }
+    }
+    const callback = t == "s" ? touch.start : t == "m" ? touch.move : touch.end;
+    callback?.(x, y);
   });
 
   const indexAt = (x, y) => y * 36 + x;
@@ -62,6 +89,7 @@
   function disableAll() {
     updates = [];
     keyboard = null;
+    touch = null;
     overlay.head = null;
     overlay.merge = false;
   }
@@ -92,6 +120,8 @@
     if (!audioContext) {
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
+      audioContext.resume();
+
       let offset = 4901;
       for (const next of [
         34480, 65420, 117242, 203649, 205945, 208919, 256509, 292880, 400963,
@@ -104,7 +134,7 @@
 
       audioOut = audioContext.createGain();
       audioOut.connect(audioContext.destination);
-      audioOut.gain.value = 0.5;
+      audioOut.gain.value = 0.1;
     }
   }
 
@@ -119,7 +149,7 @@
   function playMusic() {
     const gainNode = audioContext.createGain();
     gainNode.connect(audioOut);
-    gainNode.gain.value = 0.5;
+    gainNode.gain.value = 0.6;
     let play = true;
     (async () => {
       const sequence = [3, 3, 2, 1, 1, 2, 1, 1, 0];
@@ -158,6 +188,9 @@
       keys: ["Space"],
       down: game,
     };
+    touch = {
+      end: game,
+    };
   }
 
   //
@@ -165,6 +198,7 @@
   //
 
   async function game() {
+    disableAll();
     await startAudio();
 
     let level = 0;
@@ -397,7 +431,10 @@
             if (!rabbitsLeft) return levelComplete();
 
             // keyboard: ArrowUp
-            if (key == 0 && canPythonMoveTo(pythonX, pythonY - 1)) {
+            if (
+              (key == 0 || touchMoveDir == 0) &&
+              canPythonMoveTo(pythonX, pythonY - 1)
+            ) {
               const d = python[0] & 12;
               if (d == 4) python[0] = 132;
               if (d == 8) python[0] = 136;
@@ -409,7 +446,10 @@
             }
 
             // keyboard: ArrowRight
-            if (key == 1 && canPythonMoveTo(pythonX + 1, pythonY)) {
+            if (
+              (key == 1 || touchMoveDir == 1) &&
+              canPythonMoveTo(pythonX + 1, pythonY)
+            ) {
               const d = python[0] & 12;
               if (d == 0) python[0] = 129;
               if (d == 8) python[0] = 137;
@@ -421,7 +461,10 @@
             }
 
             // keyboard: ArrowDown
-            if (key == 2 && canPythonMoveTo(pythonX, pythonY + 1)) {
+            if (
+              (key == 2 || touchMoveDir == 2) &&
+              canPythonMoveTo(pythonX, pythonY + 1)
+            ) {
               const d = python[0] & 12;
               if (d == 0) python[0] = 130;
               if (d == 4) python[0] = 134;
@@ -433,7 +476,10 @@
             }
 
             // keyboard: ArrowLeft
-            if (key == 3 && canPythonMoveTo(pythonX - 1, pythonY)) {
+            if (
+              (key == 3 || touchMoveDir == 3) &&
+              canPythonMoveTo(pythonX - 1, pythonY)
+            ) {
               const d = python[0] & 12;
               if (d == 0) python[0] = 131;
               if (d == 4) python[0] = 135;
@@ -648,8 +694,17 @@
   }
 
   function listenKeyboard(handler) {
-    listen(document, "keydown", handler);
-    listen(document, "keyup", handler);
+    const noPassive = { passive: false };
+    listen(document, "keydown", handler, noPassive);
+    listen(document, "keyup", handler, noPassive);
+  }
+
+  function listenTouch(handler) {
+    const noPassive = { passive: false };
+    listen(document, "touchstart", handler, noPassive);
+    listen(document, "touchmove", handler, noPassive);
+    listen(document, "touchend", handler, noPassive);
+    listen(document, "touchcancel", handler, noPassive);
   }
 
   async function getElementById(id) {
