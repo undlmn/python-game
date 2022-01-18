@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="google" content="notranslate">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Питон">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="application-name" content="Питон">
   <meta name="description" content="Онлайн версия игры Питон (игровой автомат Фотон 1989г.)">
-  <link type="image/x-icon" rel="shortcut icon" href="favicon.ico">
+  <meta name="msapplication-TileColor" content="#00c000">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="site.webmanifest">
   <title>Питон</title>
   <style>
     html,
@@ -18,6 +27,9 @@
       image-rendering: pixelated;
     }
   </style>
+  <script>
+    "serviceWorker" in navigator && navigator.serviceWorker.register('sw.js');
+  </script>
   <script src="python.js" data-url="python.dat"></script>
 </head>
 <body bgcolor="#18181b">

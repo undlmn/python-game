@@ -1,7 +1,23 @@
 import { copyFile, readFile, writeFile } from "fs/promises";
 import { minify } from "terser";
 
-for (const filename of ["favicon.ico", "index.html", "python.dat"]) {
+for (const filename of [
+  "index.html",
+  "sw.js",
+  "python.dat",
+  "favicon.ico",
+  "favicon.svg",
+  "android-chrome-192x192.png",
+  "android-chrome-512x512.png",
+  "apple-touch-icon.png",
+  "browserconfig.xml",
+  "mstile-144x144.png",
+  "mstile-150x150.png",
+  "mstile-310x150.png",
+  "mstile-310x310.png",
+  "mstile-70x70.png",
+  "site.webmanifest",
+]) {
   await copyFile(
     new URL(`../src/${filename}`, import.meta.url),
     new URL(`../build/${filename}`, import.meta.url)

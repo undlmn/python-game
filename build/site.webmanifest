@@ -1,0 +1,28 @@
+{
+  "name": "Питон",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#00c000",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "description": "Онлайн версия игры Питон (игровой автомат Фотон 1989г.)"
+}

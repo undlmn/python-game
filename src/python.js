@@ -60,8 +60,11 @@
         touchMoveDir = adx > ady ? (dx > 0 ? 3 : 1) : dy > 0 ? 0 : 2;
       }
     }
-    const callback = t == "s" ? touch.start : t == "m" ? touch.move : touch.end;
-    callback?.(x, y);
+    if (touch) {
+      const callback =
+        t == "s" ? touch.start : t == "m" ? touch.move : touch.end;
+      callback?.(x, y);
+    }
   });
 
   const indexAt = (x, y) => y * 36 + x;
@@ -245,16 +248,16 @@
       const rabbitsLayer = new Uint8Array(1008);
 
       const rabbits = [
-        { x: 23, y: 12, turned: rand(2), still: 128 + rand(3) * 36 },
-        { x: 8, y: 5, turned: rand(2), still: 125 + rand(3) * 36 },
-        { x: 11, y: 17, turned: rand(2), still: 124 + rand(3) * 36 },
-        { x: 18, y: 12, turned: rand(2), still: 123 + rand(3) * 36 },
-        { x: 17, y: 5, turned: rand(2), still: 120 + rand(3) * 36 },
-        { x: 8, y: 10, turned: rand(2), still: 119 + rand(3) * 36 },
-        { x: 22, y: 6, turned: rand(2), still: 114 + rand(3) * 36 },
-        { x: 17, y: 17, turned: rand(2), still: 113 + rand(3) * 36 },
-        { x: 12, y: 12, turned: rand(2), still: 111 + rand(3) * 36 },
-        { x: 12, y: 8, turned: rand(2), still: 108 + rand(3) * 36 },
+        { x: 23, y: 12, turned: rand(2), idle: 128 + rand(3) * 36 },
+        { x: 8, y: 5, turned: rand(2), idle: 125 + rand(3) * 36 },
+        { x: 11, y: 17, turned: rand(2), idle: 124 + rand(3) * 36 },
+        { x: 18, y: 12, turned: rand(2), idle: 123 + rand(3) * 36 },
+        { x: 17, y: 5, turned: rand(2), idle: 120 + rand(3) * 36 },
+        { x: 8, y: 10, turned: rand(2), idle: 119 + rand(3) * 36 },
+        { x: 22, y: 6, turned: rand(2), idle: 114 + rand(3) * 36 },
+        { x: 17, y: 17, turned: rand(2), idle: 113 + rand(3) * 36 },
+        { x: 12, y: 12, turned: rand(2), idle: 111 + rand(3) * 36 },
+        { x: 12, y: 8, turned: rand(2), idle: 108 + rand(3) * 36 },
       ];
       let rabbitsLeft = rabbits.length;
 
@@ -297,16 +300,16 @@
               rabbit.eats--;
             } else {
               if (
-                rabbit.still < 102 &&
+                rabbit.idle < 102 &&
                 !rand(6) && // Degree of dullness
                 isPythonsHeadNearby(x, y)
               ) {
-                rabbit.still = 0;
+                rabbit.idle = 0;
               }
 
-              if (rabbit.still) {
+              if (rabbit.idle) {
                 // Standing still
-                rabbit.still--;
+                rabbit.idle--;
               } else if (
                 carrotsLayer[indexAt(x, y)] &&
                 !isPythonsHeadNearby(x, y)
@@ -314,7 +317,7 @@
                 // Eats
                 carrotsLayer[indexAt(x, y)] = 0;
                 rabbit.eats = 204;
-                rabbit.still = 108;
+                rabbit.idle = 108;
                 rabbit.turned = !rabbit.turned;
               } else {
                 // Jumps
@@ -361,17 +364,17 @@
                   rabbit.turned = rand(2);
                 }
 
-                rabbit.still = 107;
+                rabbit.idle = 107;
               }
             }
 
             // Draw rabbit
-            const { turned, still } = rabbit;
+            const { turned, idle } = rabbit;
             rabbitsLayer[indexAt(x, y - 1)] =
               96 +
               (rabbit.eats
                 ? 2 + turned + ((rabbit.eats / 5) & 1 ? 2 : 0)
-                : still > 107 || (still / 18) & 1
+                : idle > 107 || (idle / 18) & 1
                 ? turned
                 : !turned);
             rabbitsLayer[indexAt(x, y)] = 112 + turned + (rabbit.eats ? 2 : 0);
